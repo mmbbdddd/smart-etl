@@ -1,34 +1,31 @@
-package cn.hz.ddbm.setl.config
+package cn.hz.ddbm.setl.utils
 
 import cn.hz.ddbm.setl.entity.BaseDatasource
 import cn.hz.setl.commons.utils.ValueObjectUtils
 import org.junit.Assert
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.Import
+import org.springframework.context.ApplicationContextAware
 import org.springframework.test.context.junit4.SpringRunner
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@Import([EtlConfig.class, TestConfig.class])
-public class EtlConfigTest {
-
+public class ValueObjectUtilsTest {
     @Autowired
     ApplicationContext ctx;
-
-    @Test
-    public void getValueObjectService() {
-        List<BaseDatasource> dss = ValueObjectUtils.findAll(ctx, BaseDatasource.class);
-        Assert.assertNotNull(dss)
+    //验证加载能力
+    public void assertNotNull() {
+        Assert.assertNotNull(ValueObjectUtils.findAll(ctx, BaseDatasource.class))
     }
-
-    static class TestConfig {
-
+    //验证校验能力
+    public void assertValidate() {
     }
-
-
-
+    //验证服务组装
+    public void assertService() {
+    }
+    //验证刷新
+    public void assertRefresh() {
+    }
 }

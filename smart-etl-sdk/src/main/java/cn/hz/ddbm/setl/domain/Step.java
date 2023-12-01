@@ -3,10 +3,7 @@ package cn.hz.ddbm.setl.domain;
 import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.exception.EtlStepException;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.Map;
 

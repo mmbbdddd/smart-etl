@@ -4,12 +4,11 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hz.ddbm.setl.domain.*;
 import cn.hz.ddbm.setl.service.TaskFactory;
-import cn.hz.ddbm.setl.service.etlruntime.TaskService;
+import cn.hz.ddbm.setl.service.sdk.TaskService;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import cn.hz.ddbm.setl.config.EtlConfig;
-import com.hundsun.etl.domain.*;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -32,9 +31,9 @@ public class EtlTask implements Serializable {
     private static final long       serialVersionUID = 311928112251012978L;
     @TableId
     private              String     taskCode;
-    private              String     name;
+    private String     name;
     private EngineType type;
-    private              String     service;
+    private String     service;
     private              String     taskService;
     private              Object     cron;
     private              String     attrsJson;

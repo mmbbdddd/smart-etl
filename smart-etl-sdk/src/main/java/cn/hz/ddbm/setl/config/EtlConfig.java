@@ -1,10 +1,10 @@
 package cn.hz.ddbm.setl.config;
 
+import cn.hutool.extra.spring.SpringUtil;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.StepType;
 import cn.hz.ddbm.setl.service.sdk.RedisTaskService;
-import cn.hz.ddbm.setl.common.utils.SpringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,8 +19,8 @@ public class EtlConfig {
     }
 
     @Bean
-    SpringUtils springUtils() {
-        return new SpringUtils();
+    SpringUtil springUtils() {
+        return new SpringUtil();
     }
 
 

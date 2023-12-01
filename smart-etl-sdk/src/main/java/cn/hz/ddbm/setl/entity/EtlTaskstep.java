@@ -1,13 +1,11 @@
 package cn.hz.ddbm.setl.entity;
 
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.StepType;
 import cn.hz.ddbm.setl.domain.Task;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.hundsun.etl.domain.*;
 import lombok.Data;
 
 import java.io.Serializable;

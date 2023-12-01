@@ -5,9 +5,8 @@ import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.exception.EtlStepException;
 import cn.hz.ddbm.setl.service.TaskFactory;
-import cn.hz.ddbm.setl.service.etlruntime.TaskService;
+import cn.hz.ddbm.setl.service.sdk.TaskService;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
-import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -20,13 +19,9 @@ import java.util.Map;
 @NoArgsConstructor
 @Slf4j
 public class Task {
-    @NotNull
     String     code;
-    @NotNull
     String     name;
-    @NotNull
     EngineType type;
-    @NotNull
     Boolean    fluent;
 
     @NonNull Map<String, Step> steps;
