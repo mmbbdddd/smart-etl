@@ -1,12 +1,12 @@
-package cn.hz.ddbm.setl.service.sdk.factory;
+package cn.hz.ddbm.setl.service.factory;
 
 import cn.hutool.json.JSONUtil;
 import cn.hz.ddbm.setl.domain.*;
 import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.config.EtlConfig;
-import cn.hz.ddbm.setl.entity.EtlTask;
-import cn.hz.ddbm.setl.entity.EtlTaskstep;
-import cn.hz.ddbm.setl.entity.EtlTaskstepAction;
+import cn.hz.ddbm.setl.entity.EntryTask;
+import cn.hz.ddbm.setl.entity.EntryTaskstep;
+import cn.hz.ddbm.setl.entity.EntryTaskstepAction;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 import cn.hz.setl.commons.utils.ConfigTableUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +27,14 @@ public class PipelineFactory extends BaseTaskFactory {
     @Override
     public Map<String, Task> initWorkFlows() {
         //从数据库定义中创建流程定义
-        List<EtlTask>                        tasks       = ConfigTableUtils.findAll(EtlTask.class);
-        List<EtlTaskstep>                    steps       = ConfigTableUtils.findAll(EtlTaskstep.class);
-        List<EtlTaskstepAction>              actions     = ConfigTableUtils.findAll(EtlTaskstepAction.class);
-        Map<String, List<EtlTaskstep>>       taskSteps   = steps.stream().collect(Collectors.groupingBy(EtlTaskstep::getTaskCode));
-        Map<String, List<EtlTaskstepAction>> taskActions = actions.stream().collect(Collectors.groupingBy(EtlTaskstepAction::getTaskCode));
+        List<EntryTask>                        tasks       = ConfigTableUtils.findAll(ctx,EntryTask.class);
+        List<EntryTaskstep>                    steps       = ConfigTableUtils.findAll(ctx,EntryTaskstep.class);
+        List<EntryTaskstepAction>              actions     = ConfigTableUtils.findAll(ctx,EntryTaskstepAction.class);
+        Map<String, List<EntryTaskstep>>       taskSteps   = steps.stream().collect(Collectors.groupingBy(EntryTaskstep::getTaskCode));
+        Map<String, List<EntryTaskstepAction>> taskActions = actions.stream().collect(Collectors.groupingBy(EntryTaskstepAction::getTaskCode));
         List<Task> flows = tasks.stream().filter(task -> task.getType().equals(EngineType.PIPELINE)).map(task -> {
             try {
-                Task flow = EtlTask.build(this, EngineType.PIPELINE, task, taskSteps.get(task.getTaskCode()), taskActions.get(task.getTaskCode()), ctx);
+                Task flow = EntryTask.build(this, EngineType.PIPELINE, task, taskSteps.get(task.getTaskCode()), taskActions.get(task.getTaskCode()), ctx);
                 log.debug("构建ETL工作流{}:{}", task.getTaskCode(), JSONUtil.toJsonStr(flow));
                 return flow;
             } catch (Throwable e) {
@@ -49,7 +49,7 @@ public class PipelineFactory extends BaseTaskFactory {
      * 构建不同工作流的领域对象
      */
     @Override
-    public Step dtoToDomain(EtlTaskstep dto, Task flow, Map<String, Action> actionMap) {
+    public Step dtoToDomain(EntryTaskstep dto, Task flow, Map<String, Action> actionMap) {
         Assert.notNull(dto.getAttr(EtlConfig.COAST.PIPELINE_INDEX_ATTR, Integer.class), "EtlTaskstep.attrs[index] is null");
         //优化：type可由index决定。
         Step step = new Step(dto.getStepCode(), dto.getName(), dto.getType(), actionMap, dto.getAttrs());

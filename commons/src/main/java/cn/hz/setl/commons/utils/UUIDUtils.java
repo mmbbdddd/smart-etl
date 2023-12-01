@@ -1,4 +1,4 @@
-package cn.hz.ddbm.setl.utils;
+package cn.hz.setl.commons.utils;
 
 import java.util.UUID;
 

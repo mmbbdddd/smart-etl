@@ -1,6 +1,6 @@
 package cn.hz.ddbm.setl.utils
 
-import cn.hz.ddbm.setl.entity.BaseDatasource
+import cn.hz.ddbm.setl.entity.EntryDatasource
 
 import org.junit.Assert
 import org.junit.runner.RunWith
@@ -16,7 +16,7 @@ public class ValueObjectUtilsTest {
     ApplicationContext ctx;
     //验证加载能力
     public void assertNotNull() {
-        Assert.assertNotNull(ValueObjectUtils.findAll(ctx, BaseDatasource.class))
+        Assert.assertNotNull(ValueObjectUtils.findAll(ctx, EntryDatasource.class))
     }
     //验证校验能力
     public void assertValidate() {

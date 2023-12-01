@@ -26,8 +26,8 @@ import org.springframework.util.StringUtils;
  * @since 2023-11-17 14:17:13
  */
 @Data
-@TableName("ETL_TASK")
-public class EtlTask implements Serializable    {
+@TableName("ENTRY_TASK")
+public class EntryTask implements Serializable    {
     private static final long       serialVersionUID = 311928112251012978L;
     @TableId
     private              String     taskCode;
@@ -42,7 +42,7 @@ public class EtlTask implements Serializable    {
     private              String     alias;
 
 
-    public static EtlTask of(Task workFlow) {
+    public static EntryTask of(Task workFlow) {
         return null;
     }
 
@@ -59,7 +59,7 @@ public class EtlTask implements Serializable    {
     }
 
 
-    public static Task build(TaskFactory taskFactory, EngineType type, EtlTask task, List<EtlTaskstep> steps, List<EtlTaskstepAction> actions, ApplicationContext ctx) throws Throwable {
+    public static Task build(TaskFactory taskFactory, EngineType type, EntryTask task, List<EntryTaskstep> steps, List<EntryTaskstepAction> actions, ApplicationContext ctx) throws Throwable {
         //构建
         Task                                       flow      = new Task();
         Table<String, String, Map<String, Action>> actionMap = buildActions(flow, actions, ctx);
@@ -89,18 +89,18 @@ public class EtlTask implements Serializable    {
         return service;
     }
 
-    private static Map<String, Step> buildSteps(Task flow, List<EtlTaskstep> steps, Table<String, String, Map<String, Action>> actions) {
-        List<Step> taskSteps = steps.stream().map(step -> EtlTaskstep.build(step, flow, actions.get(flow.getCode(), step.getStepCode()))).collect(Collectors.toList());
+    private static Map<String, Step> buildSteps(Task flow, List<EntryTaskstep> steps, Table<String, String, Map<String, Action>> actions) {
+        List<Step> taskSteps = steps.stream().map(step -> EntryTaskstep.build(step, flow, actions.get(flow.getCode(), step.getStepCode()))).collect(Collectors.toList());
         return taskSteps.stream().collect(Collectors.toMap(Step::getCode, s -> s));
     }
 
-    private static Table<String, String, Map<String, Action>> buildActions(Task flow, List<EtlTaskstepAction> actions, ApplicationContext ctx) throws Throwable {
+    private static Table<String, String, Map<String, Action>> buildActions(Task flow, List<EntryTaskstepAction> actions, ApplicationContext ctx) throws Throwable {
         Table<String, String, Map<String, Action>> actionTables = HashBasedTable.create();
-        for (EtlTaskstepAction action : actions) {
-            Action              actionBean = EtlTaskstepAction.build(flow, action, ctx);
+        for (EntryTaskstepAction action : actions) {
+            Action              actionBean = EntryTaskstepAction.build(flow, action, ctx);
             Map<String, Action> actionMap  = actionTables.get(action.getTaskCode(), action.getTaskCode());
             if (null == actionMap) {
-                synchronized (EtlTask.class) {
+                synchronized (EntryTask.class) {
                     actionMap = new HashMap<>();
                     actionTables.put(action.getTaskCode(), action.getStepCode(), actionMap);
                 }

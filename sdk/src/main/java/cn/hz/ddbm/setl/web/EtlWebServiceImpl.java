@@ -1,19 +1,21 @@
-package cn.hz.ddbm.setl.service;
+package cn.hz.ddbm.setl.web;
 
-import cn.hz.ddbm.setl.entity.EtlTask;
-import cn.hz.ddbm.setl.entity.EtlTaskstep;
+import cn.hz.ddbm.setl.entity.EntryTask;
+import cn.hz.ddbm.setl.entity.EntryTaskstep;
 import cn.hz.ddbm.setl.entity.TaskLogs;
 import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.exception.EtlException;
 import cn.hz.ddbm.setl.exception.NotSupportOperationException;
+import cn.hz.ddbm.setl.service.EtlWebService;
+import cn.hz.ddbm.setl.service.TaskFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.hz.ddbm.setl.domain.EngineType;
 import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.Task;
 import cn.hz.ddbm.setl.mapper.EtlTaskLogsMapper;
-import cn.hz.ddbm.setl.service.sdk.factory.AtomFactory;
-import cn.hz.ddbm.setl.service.sdk.factory.PipelineFactory;
-import cn.hz.ddbm.setl.service.sdk.factory.WorkFactory;
+import cn.hz.ddbm.setl.service.factory.AtomFactory;
+import cn.hz.ddbm.setl.service.factory.PipelineFactory;
+import cn.hz.ddbm.setl.service.factory.WorkFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,9 +32,9 @@ import java.util.stream.Collectors;
  * 3，流程实例的状态变更等管理(tasklogs）——需要看具体工作流实现模式支持不支持。
  */
 public class EtlWebServiceImpl implements EtlWebService {
-    WorkFactory     workflowEtlService;
+    WorkFactory workflowEtlService;
     PipelineFactory pipelineEtlService;
-    AtomFactory     atomEtlService;
+    AtomFactory atomEtlService;
 
     EtlTaskLogsMapper repository;
 
@@ -43,8 +45,8 @@ public class EtlWebServiceImpl implements EtlWebService {
      * @param predicate
      * @return
      */
-    public Page<EtlTask> findTasks(Predicate<EtlTask> predicate, Page<EtlTask> page) {
-        List<EtlTask> datas = allTasks().stream().filter(predicate).sorted(Comparator.comparing(EtlTask::getTaskCode)).skip(page.getSize() * page.getCurrent()).limit(page.getSize()).collect(Collectors.toList());
+    public Page<EntryTask> findTasks(Predicate<EntryTask> predicate, Page<EntryTask> page) {
+        List<EntryTask> datas = allTasks().stream().filter(predicate).sorted(Comparator.comparing(EntryTask::getTaskCode)).skip(page.getSize() * page.getCurrent()).limit(page.getSize()).collect(Collectors.toList());
         return page.setRecords(datas);
     }
 
@@ -52,35 +54,35 @@ public class EtlWebServiceImpl implements EtlWebService {
      * @return
      */
     @Override
-    public List<EtlTask> allTasks() {
-        List<EtlTask> tasks = new ArrayList<>();
-        tasks.addAll(workflowEtlService.allWorkflows().values().stream().map(EtlTask::of).collect(Collectors.toSet()));
-        tasks.addAll(pipelineEtlService.allWorkflows().values().stream().map(EtlTask::of).collect(Collectors.toSet()));
-        tasks.addAll(atomEtlService.allWorkflows().values().stream().map(EtlTask::of).collect(Collectors.toSet()));
+    public List<EntryTask> allTasks() {
+        List<EntryTask> tasks = new ArrayList<>();
+        tasks.addAll(workflowEtlService.allWorkflows().values().stream().map(EntryTask::of).collect(Collectors.toSet()));
+        tasks.addAll(pipelineEtlService.allWorkflows().values().stream().map(EntryTask::of).collect(Collectors.toSet()));
+        tasks.addAll(atomEtlService.allWorkflows().values().stream().map(EntryTask::of).collect(Collectors.toSet()));
         return tasks;
     }
 
     @Override
-    public EtlTask getTask(String taskCode) {
+    public EntryTask getTask(String taskCode) {
         if (atomEtlService.allWorkflows().containsKey(taskCode)) {
-            return EtlTask.of(atomEtlService.allWorkflows().get(taskCode));
+            return EntryTask.of(atomEtlService.allWorkflows().get(taskCode));
         }
         if (pipelineEtlService.allWorkflows().containsKey(taskCode)) {
-            return EtlTask.of(pipelineEtlService.allWorkflows().get(taskCode));
+            return EntryTask.of(pipelineEtlService.allWorkflows().get(taskCode));
         }
         if (workflowEtlService.allWorkflows().containsKey(taskCode)) {
-            return EtlTask.of(workflowEtlService.allWorkflows().get(taskCode));
+            return EntryTask.of(workflowEtlService.allWorkflows().get(taskCode));
         }
         throw new NoSuchElementException(taskCode);
     }
 
     @Override
-    public List<EtlTaskstep> getSteps(String taskCode) {
-        return workflowEtlService.allWorkflows().get(taskCode).getSteps().values().stream().map(EtlTaskstep::of).collect(Collectors.toList());
+    public List<EntryTaskstep> getSteps(String taskCode) {
+        return workflowEtlService.allWorkflows().get(taskCode).getSteps().values().stream().map(EntryTaskstep::of).collect(Collectors.toList());
     }
 
     @Override
-    public EtlTaskstep getStep(String taskCode, String stepCode) {
+    public EntryTaskstep getStep(String taskCode, String stepCode) {
         Task flow = workflowEtlService.allWorkflows().get(taskCode);
         if (null == flow) {
             throw new NoSuchElementException(stepCode);
@@ -89,7 +91,7 @@ public class EtlWebServiceImpl implements EtlWebService {
         if (null == step) {
             throw new NoSuchElementException(stepCode);
         }
-        return EtlTaskstep.of(step);
+        return EntryTaskstep.of(step);
     }
 
     @Override

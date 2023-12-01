@@ -4,7 +4,7 @@ import cn.hz.ddbm.setl.EtlTestConfig;
 import cn.hz.ddbm.setl.config.EtlConfig
 import cn.hz.ddbm.setl.exception.EtlException;
 import cn.hz.ddbm.setl.service.TaskFactory;
-import cn.hz.ddbm.setl.service.sdk.factory.PipelineFactory
+import cn.hz.ddbm.setl.service.factory.PipelineFactory
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,8 +2,8 @@ package cn.hz.ddbm.setl.service;
 
 import cn.hz.ddbm.setl.exception.EtlException;
 import cn.hz.ddbm.setl.exception.NotSupportOperationException;
-import cn.hz.ddbm.setl.entity.EtlTask;
-import cn.hz.ddbm.setl.entity.EtlTaskstep;
+import cn.hz.ddbm.setl.entity.EntryTask;
+import cn.hz.ddbm.setl.entity.EntryTaskstep;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,13 +15,13 @@ public interface EtlWebService {
      *
      * @return
      */
-    List<EtlTask> allTasks();
+    List<EntryTask> allTasks();
 
-    EtlTask getTask(String taskCode);
+    EntryTask getTask(String taskCode);
 
-    List<EtlTaskstep> getSteps(String taskCode);
+    List<EntryTaskstep> getSteps(String taskCode);
 
-    EtlTaskstep getStep(String taskCode, String stepCode);
+    EntryTaskstep getStep(String taskCode, String stepCode);
 
     /**
      * 取消任务

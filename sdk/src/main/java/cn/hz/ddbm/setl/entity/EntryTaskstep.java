@@ -22,8 +22,8 @@ import org.springframework.util.StringUtils;
  * @since 2023-11-17 14:17:13
  */
 @Data
-@TableName("ETL_TASKSTEP")
-public class EtlTaskstep implements Serializable    {
+@TableName("ENTRY_TASKSTEP")
+public class EntryTaskstep implements Serializable    {
     private static final long     serialVersionUID = 888541690116609515L;
     @TableId
     private              Integer  id;
@@ -39,7 +39,7 @@ public class EtlTaskstep implements Serializable    {
     private              String   alias;
 
 
-    public static EtlTaskstep of(Step step) {
+    public static EntryTaskstep of(Step step) {
         return null;
     }
 
@@ -51,7 +51,7 @@ public class EtlTaskstep implements Serializable    {
     }
 
 
-    public static Step build(EtlTaskstep dto, Task task, Map<String, Action> actionMap) {
+    public static Step build(EntryTaskstep dto, Task task, Map<String, Action> actionMap) {
         return task.getTaskFactory().dtoToDomain(dto, task, actionMap);
     }
 

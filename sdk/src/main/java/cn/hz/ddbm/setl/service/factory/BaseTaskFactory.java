@@ -1,4 +1,4 @@
-package cn.hz.ddbm.setl.service.sdk.factory;
+package cn.hz.ddbm.setl.service.factory;
 
 import cn.hutool.json.JSONUtil;
 import cn.hz.ddbm.setl.exception.EtlException;
@@ -7,7 +7,7 @@ import cn.hz.ddbm.setl.domain.Task;
 import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.service.TaskFactory;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
-import cn.hz.ddbm.setl.utils.UUIDUtils;
+import cn.hz.setl.commons.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;

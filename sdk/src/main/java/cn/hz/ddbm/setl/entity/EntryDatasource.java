@@ -2,7 +2,9 @@ package cn.hz.ddbm.setl.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
+
 import java.io.Serializable;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
@@ -12,8 +14,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @since 2023-11-17 14:17:13
  */
 @Data
-@TableName("BASE_DATASOURCE")
-public class BaseDatasource implements Serializable {
+@TableName("ENTRY_DATASOURCE")
+public class EntryDatasource implements Serializable {
     private static final long serialVersionUID = -33889968870694021L;
     @TableId
     private String datasourceCode;
@@ -24,7 +26,7 @@ public class BaseDatasource implements Serializable {
     private String attrsJson;
     private String type;
     private Integer threshold;
-    private              String app;
-    private              String alias;
+    private String app;
+    private String alias;
 }
 

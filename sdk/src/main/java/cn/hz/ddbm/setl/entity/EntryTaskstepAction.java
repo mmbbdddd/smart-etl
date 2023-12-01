@@ -17,8 +17,8 @@ import org.springframework.context.ApplicationContext;
  * @since 2023-11-17 14:17:13
  */
 @Data
-@TableName("ETL_TASKSTEP_ACTION")
-public class EtlTaskstepAction implements Serializable     {
+@TableName("ENTRY_TASKSTEP_ACTION")
+public class EntryTaskstepAction implements Serializable     {
     private static final long    serialVersionUID = 641312056809409315L;
     @TableId
     private              Integer id;
@@ -33,7 +33,7 @@ public class EtlTaskstepAction implements Serializable     {
     private              String alias;
 
 
-    public static Action build(Task flow, EtlTaskstepAction dto, ApplicationContext ctx) throws Throwable {
+    public static Action build(Task flow, EntryTaskstepAction dto, ApplicationContext ctx) throws Throwable {
         return new Action(dto.getAction(), dto.getName());
     }
 

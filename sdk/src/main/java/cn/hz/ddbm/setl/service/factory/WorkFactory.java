@@ -1,10 +1,10 @@
-package cn.hz.ddbm.setl.service.sdk.factory;
+package cn.hz.ddbm.setl.service.factory;
 
 import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.Task;
-import cn.hz.ddbm.setl.entity.EtlTaskstep;
+import cn.hz.ddbm.setl.entity.EntryTaskstep;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public class WorkFactory extends BaseTaskFactory {
 
 
     @Override
-    public Step dtoToDomain(EtlTaskstep dto, Task flow, Map<String, Action> actionMap) {
+    public Step dtoToDomain(EntryTaskstep dto, Task flow, Map<String, Action> actionMap) {
         return null;
     }
 

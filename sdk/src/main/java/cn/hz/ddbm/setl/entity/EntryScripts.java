@@ -14,8 +14,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @since 2023-11-17 14:17:13
  */
 @Data
-@TableName("BASE_SCRIPTS")
-public class BaseScripts implements Serializable {
+@TableName("ENTRY_SCRIPTS")
+public class EntryScripts implements Serializable {
     private static final long   serialVersionUID = -18164501183955966L;
     @TableId
     private              String scriptCode;
