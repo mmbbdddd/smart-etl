@@ -17,7 +17,7 @@ public class RedisTaskService implements TaskService {
     }
 
     @Override
-    public TaskRuntimeContext getOrCreateContext( Task task, TaskFactory.EtlTaskRequest request) throws EtlException {
+    public TaskRuntimeContext getOrCreateContext(Task task, TaskFactory.EtlTaskRequest request) throws EtlException {
         return datas.computeIfAbsent(request.getTaskId(), new Function<String, TaskRuntimeContext>() {
             @Override
             public TaskRuntimeContext apply(String taskId) {

@@ -23,6 +23,7 @@ public class EtlConfig {
     SpringUtil springUtils() {
         return new SpringUtil();
     }
+
     @Bean
     ConfigTableUtils configTableUtils() {
         return new ConfigTableUtils();
@@ -34,8 +35,8 @@ public class EtlConfig {
         public static final String FLUENT_ATTR         = "fluent";
         public static final String DEFAULT_SEREVICE    = "redisTaskService";
         public static final String DEFAULT_COMMAND     = "submit";
-        public static final Step FAIL_STEP           = new Step("fail", "失败节点", StepType.fail, Collections.emptyMap(), Collections.emptyMap());
-        public static final Action EMPTY_ACTION        = new Action("_emptyAction", "无逻辑Action");
+        public static final Step   FAIL_STEP           = new Step("fail", "失败节点", StepType.fail, Collections.emptyMap(), Collections.emptyMap());
+        public static final Action EMPTY_ACTION        = new Action("_emptyAction", "无逻辑Action",Collections.emptyMap());
 
     }
 }

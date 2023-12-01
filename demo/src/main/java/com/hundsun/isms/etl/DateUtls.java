@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Component
 public class DateUtls {
-    public static String getNow(){
+    public static String getNow() {
         return new Date().toString();
     }
 }

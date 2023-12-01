@@ -5,7 +5,6 @@
     高性能：SQL执行比数据库快50倍，比clickhourse快10倍
     高度配置化：大多数ETL操作配置化即可完成，无需开发代码
 
-
 # quicker start
 
 1，引入jar
@@ -16,8 +15,8 @@
             <version>0.0.1</version>
         </dependency>
 
-2，在etl_task表中增加任务定义 
- 
+2，在etl_task表中增加任务定义
+
 ![任务定义](doc/task.jpg)
 
 3，在etl_taskstep表中增加任务步骤
@@ -32,14 +31,9 @@
 
 ![执行日志](doc/log.jpg)
 
-
-
-
 # 架构设计
 
 流程编排[流程编排](https://github.com/mmbbdddd/process-control)
 嵌入式计算[步骤定义](https://gitee.com/ddddbb/GuanYa)
 
-
-
- 备注：代码还么有整理完毕。
+备注：代码还么有整理完毕。

@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@Import([EtlConfig.class ])
+@Import([EtlConfig.class])
 public class EtlConfigTest {
 
     @Autowired
@@ -21,10 +21,9 @@ public class EtlConfigTest {
 
     @Test
     public void getValueObjectService() {
-        List<EntryDatasource> dss =  ConfigTableUtils.findAll(EntryDatasource.class);
+        List<EntryDatasource> dss = ConfigTableUtils.findAll(EntryDatasource.class);
         Assert.assertNotNull(dss)
     }
-
 
 
 }

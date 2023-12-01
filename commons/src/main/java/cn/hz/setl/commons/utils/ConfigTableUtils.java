@@ -12,9 +12,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.util.Collections;
 import java.util.List;
 
-public class ConfigTableUtils   {
+public class ConfigTableUtils {
 
-    public static <T> List<T> findAll(ApplicationContext ctx,Class<T> type) {
+    public static <T> List<T> findAll(ApplicationContext ctx, Class<T> type) {
         NamedParameterJdbcTemplate jdbcTemplate = ctx.getBean(NamedParameterJdbcTemplate.class);
         String                     sql          = buildSqlByType(type);
         return jdbcTemplate.query(sql, Collections.emptyMap(), BeanPropertyRowMapper.newInstance(type));

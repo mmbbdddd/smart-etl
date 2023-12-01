@@ -27,9 +27,9 @@ public class PipelineFactory extends BaseTaskFactory {
     @Override
     public Map<String, Task> initWorkFlows() {
         //从数据库定义中创建流程定义
-        List<EntryTask>                        tasks       = ConfigTableUtils.findAll(ctx,EntryTask.class);
-        List<EntryTaskstep>                    steps       = ConfigTableUtils.findAll(ctx,EntryTaskstep.class);
-        List<EntryTaskstepAction>              actions     = ConfigTableUtils.findAll(ctx,EntryTaskstepAction.class);
+        List<EntryTask>                        tasks       = ConfigTableUtils.findAll(ctx, EntryTask.class);
+        List<EntryTaskstep>                    steps       = ConfigTableUtils.findAll(ctx, EntryTaskstep.class);
+        List<EntryTaskstepAction>              actions     = ConfigTableUtils.findAll(ctx, EntryTaskstepAction.class);
         Map<String, List<EntryTaskstep>>       taskSteps   = steps.stream().collect(Collectors.groupingBy(EntryTaskstep::getTaskCode));
         Map<String, List<EntryTaskstepAction>> taskActions = actions.stream().collect(Collectors.groupingBy(EntryTaskstepAction::getTaskCode));
         List<Task> flows = tasks.stream().filter(task -> task.getType().equals(EngineType.PIPELINE)).map(task -> {

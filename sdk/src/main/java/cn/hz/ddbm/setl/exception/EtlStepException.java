@@ -12,7 +12,4 @@ public class EtlStepException extends Exception {
     Step   step;
     Action action;
 
-    public static EtlStepException wrap(EtlRouteException e) {
-        return new EtlStepException(e.getCmd(),e.getStep(),e.getAction());
-    }
 }

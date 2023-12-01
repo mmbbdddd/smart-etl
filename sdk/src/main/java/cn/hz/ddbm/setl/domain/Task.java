@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.exception.EtlStepException;
+import cn.hz.ddbm.setl.exception.NotSupportCommandException;
 import cn.hz.ddbm.setl.service.TaskFactory;
 import cn.hz.ddbm.setl.service.sdk.TaskService;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
@@ -13,17 +14,18 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
 @Slf4j
 public class Task {
-    String     code;
-    String     name;
-    EngineType type;
-    Boolean    fluent;
-
+    @NonNull String            code;
+    @NonNull String            name;
+    @NonNull EngineType        type;
+    @NonNull Boolean           fluent;
     @NonNull Map<String, Step> steps;
     @NonNull Step              startStep;
     @NonNull Step              failStep;
@@ -43,7 +45,9 @@ public class Task {
 
 
     public void validate() {
-
+        steps.forEach((stepCode, step) -> step.validate());
+        startStep.validate();
+        failStep.validate();
     }
 
     public TaskFactory getTaskFactory() {
@@ -62,12 +66,12 @@ public class Task {
                 if (ctx.isRunnable()) {
                     String oldStep  = ctx.getStep().getCode();
                     String nextStep = ctx.getStep().execute(ctx);
-                    String action   = ctx.getAction().getCode();
+                    String action   = ctx.getAction().getAction();
                     ctx.updateTaskStep(nextStep);
-                    log.info("{}任务状态变更:{},{},{},{},{}==>{},",engine, ctx.getTaskId(), code, ctx.getCommand(), action, oldStep, nextStep);
+                    log.info("{}任务状态变更:{},{},{},{},{}==>{},", engine, ctx.getTaskId(), code, ctx.getCommand(), action, oldStep, nextStep);
                 } else {
-                    log.info("{}任务已完成:{},{},{},{},{} ", engine,ctx.getTaskId(), code, ctx.getTaskStatus(), ctx.getStep().getType(),ctx.getStep().getCode());
-                    break ;
+                    log.info("{}任务已完成:{},{},{},{},{} ", engine, ctx.getTaskId(), code, ctx.getTaskStatus(), ctx.getStep().getType(), ctx.getStep().getCode());
+                    break;
                 }
                 if (ctx.getFluent()) {
                     continue loop;
@@ -81,25 +85,49 @@ public class Task {
             try {
                 failOverStep = getTaskFactory().exceptionRoute(ctx, e);
                 ctx.updateTaskStep(failOverStep);
-                log.warn("{}处理异常:{},{},{},{}==>{}",engine, ctx.getTaskId(), code, ctx.getCommand(), oldStep, failOverStep);
+                log.warn("{}处理异常:{},{},{},{}==>{}", engine, ctx.getTaskId(), code, ctx.getCommand(), oldStep, failOverStep);
             } catch (EtlRouteException ex) {
                 //路由异常应该为工作流定义错误，异常不抛出，任务状态设置为失败。
                 ctx.updateTaskStatus(TaskStatus.fail, oldStep);
-                log.error("{}路由异常:{},{},{}", engine,ctx.getTaskId(), code, oldStep, ex);
+                log.error("{}路由异常:{},{},{}", engine, ctx.getTaskId(), code, oldStep, ex);
             }
         } catch (EtlRouteException re) {
             String oldStep = re.getStep().getCode();
             //路由异常应该为工作流定义错误，异常不抛出，任务状态设置为失败。
             ctx.updateTaskStatus(TaskStatus.fail, oldStep);
-            log.error("{}路由异常:{},{},{}", engine,ctx.getTaskId(), code, oldStep, re);
+            log.error("{}路由异常:{},{},{}", engine, ctx.getTaskId(), code, oldStep, re);
+        } catch (NotSupportCommandException e) {
+            //todo
+            throw new RuntimeException(e);
         } finally {
             try {
                 service.updateFlowStatus(ctx);
-                log.debug("{}上下文更新:{},{},{}",engine, ctx.getTaskId(), code, JSONUtil.toJsonStr(ctx));
+                log.debug("{}上下文更新:{},{},{}", engine, ctx.getTaskId(), code, ctx.toString());
             } catch (IOException e) {
-                log.error("{}运行时保存异常:{},{}}", engine,ctx.getTaskId(), JSONUtil.toJsonStr(ctx));
+                log.error("{}运行时保存异常:{},{}}", engine, ctx.getTaskId(), ctx.toString());
             }
         }
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+
+        return Objects.equals(code, task.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return code != null ? code.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "code='" + code + '\'' +
+                '}';
     }
 }

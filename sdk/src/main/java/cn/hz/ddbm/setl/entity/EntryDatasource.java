@@ -16,17 +16,17 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @Data
 @TableName("ENTRY_DATASOURCE")
 public class EntryDatasource implements Serializable {
-    private static final long serialVersionUID = -33889968870694021L;
+    private static final long    serialVersionUID = -33889968870694021L;
     @TableId
-    private String datasourceCode;
-    private Object driverClassName;
-    private Object url;
-    private String username;
-    private String passowrd;
-    private String attrsJson;
-    private String type;
-    private Integer threshold;
-    private String app;
-    private String alias;
+    private              String  datasourceCode;
+    private              Object  driverClassName;
+    private              Object  url;
+    private              String  username;
+    private              String  passowrd;
+    private              String  attrsJson;
+    private              String  type;
+    private              Integer threshold;
+    private              String  app;
+    private              String  alias;
 }
 

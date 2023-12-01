@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class EtlRouteException extends Exception {
     String cmd;
-    Step       step;
-    Action     action;
+    Step   step;
+    Action action;
 }

@@ -91,4 +91,14 @@ public class TaskRuntimeContext {
     public String getErrorMessage() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "TaskRuntimeContext{" +
+                "taskId='" + taskId + '\'' +
+                ", args=" + args +
+                ", task=" + task +
+                ", step=" + step +
+                '}';
+    }
 }

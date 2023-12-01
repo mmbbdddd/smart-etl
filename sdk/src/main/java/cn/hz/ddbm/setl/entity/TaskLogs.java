@@ -21,9 +21,9 @@ public class TaskLogs implements Serializable {
     @TableId
     private              Long       id;
     private              String     taskCode;
-    private EngineType engineType;
-    private TaskStatus taskStatus;
-    private String     taskStep;
+    private              EngineType engineType;
+    private              TaskStatus taskStatus;
+    private              String     taskStep;
     private              String     stepStatus;
 
 

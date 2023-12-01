@@ -23,7 +23,7 @@ public class BaseEtlServiceTest {
     @Test
     public void executeTask() {
         try {
-            TaskFactory.EtlTaskResponse resp =  pipelineEtlService.executeTask(new TaskFactory.EtlTaskRequest(
+            TaskFactory.EtlTaskResponse resp = pipelineEtlService.executeTask(new TaskFactory.EtlTaskRequest(
                     taskCode: "etlTest",
                     fluent: true
             ));

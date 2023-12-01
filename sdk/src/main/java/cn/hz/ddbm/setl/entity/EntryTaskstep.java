@@ -23,13 +23,13 @@ import org.springframework.util.StringUtils;
  */
 @Data
 @TableName("ENTRY_TASKSTEP")
-public class EntryTaskstep implements Serializable    {
+public class EntryTaskstep implements Serializable {
     private static final long     serialVersionUID = 888541690116609515L;
     @TableId
     private              Integer  id;
     private              String   stepCode;
     private              String   taskCode;
-    private StepType type;
+    private              StepType type;
     private              Integer  isCancel;
     private              Integer  isPause;
     private              String   attrsJson;

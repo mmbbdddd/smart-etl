@@ -27,7 +27,7 @@ import org.springframework.util.StringUtils;
  */
 @Data
 @TableName("ENTRY_TASK")
-public class EntryTask implements Serializable    {
+public class EntryTask implements Serializable {
     private static final long       serialVersionUID = 311928112251012978L;
     @TableId
     private              String     taskCode;

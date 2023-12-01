@@ -12,7 +12,6 @@ import cn.hz.ddbm.setl.entity.TaskRequestLogs;
  */
 public interface EtlTaskRequestLogsMapper extends BaseMapper<TaskRequestLogs> {
 
-    
 
 }
 

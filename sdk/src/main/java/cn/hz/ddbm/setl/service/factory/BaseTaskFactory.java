@@ -52,7 +52,7 @@ public abstract class BaseTaskFactory implements TaskFactory, InitializingBean, 
         Assert.notNull(request.getTaskCode(), "EtlTaskRequest.taskCode is null");
         Task task = getWorkFlow(request.getTaskCode());
         Assert.notNull(task, "Task.taskCode is null:" + request.getTaskCode());
-        TaskService taskService = task.getService();
+        TaskService        taskService = task.getService();
         TaskRuntimeContext ctx         = taskService.getOrCreateContext(task, request);
 //       步骤 3456
         task.execute(ctx);

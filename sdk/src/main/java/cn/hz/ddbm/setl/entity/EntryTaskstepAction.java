@@ -1,5 +1,6 @@
 package cn.hz.ddbm.setl.entity;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.annotation.TableId;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Task;
@@ -18,7 +19,7 @@ import org.springframework.context.ApplicationContext;
  */
 @Data
 @TableName("ENTRY_TASKSTEP_ACTION")
-public class EntryTaskstepAction implements Serializable     {
+public class EntryTaskstepAction implements Serializable {
     private static final long    serialVersionUID = 641312056809409315L;
     @TableId
     private              Integer id;
@@ -29,12 +30,12 @@ public class EntryTaskstepAction implements Serializable     {
     private              String  command;
     private              String  attrs;
     private              String  memo;
-    private              String app;
-    private              String alias;
+    private              String  app;
+    private              String  alias;
 
 
     public static Action build(Task flow, EntryTaskstepAction dto, ApplicationContext ctx) throws Throwable {
-        return new Action(dto.getAction(), dto.getName());
+        return new Action(dto.getAlias(), dto.getName(), JSONUtil.parseObj(dto.attrs));
     }
 
 }

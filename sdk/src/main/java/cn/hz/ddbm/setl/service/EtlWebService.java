@@ -1,7 +1,8 @@
 package cn.hz.ddbm.setl.service;
 
 import cn.hz.ddbm.setl.exception.EtlException;
-import cn.hz.ddbm.setl.exception.NotSupportOperationException;
+import cn.hz.ddbm.setl.exception.NotSupportCommandException;
+import cn.hz.ddbm.setl.exception.NotSupportFunctionException;
 import cn.hz.ddbm.setl.entity.EntryTask;
 import cn.hz.ddbm.setl.entity.EntryTaskstep;
 
@@ -26,14 +27,14 @@ public interface EtlWebService {
     /**
      * 取消任务
      */
-    void cancelTask(String taskId) throws NotSupportOperationException, EtlException, IOException;
+    void cancelTask(String taskId) throws NotSupportCommandException, EtlException, IOException, NotSupportFunctionException;
 
     /**
      * 暂停任务
      *
      * @param taskId
      */
-    void pauseTask(String taskId) throws NotSupportOperationException, IOException, EtlException;
+    void pauseTask(String taskId) throws NotSupportCommandException, IOException, EtlException, NotSupportFunctionException;
 
     /**
      * 查询任务执行状态
