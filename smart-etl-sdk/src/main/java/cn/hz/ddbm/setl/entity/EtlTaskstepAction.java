@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationContext;
  */
 @Data
 @TableName("ETL_TASKSTEP_ACTION")
-public class EtlTaskstepAction implements Serializable {
+public class EtlTaskstepAction implements Serializable     {
     private static final long    serialVersionUID = 641312056809409315L;
     @TableId
     private              Integer id;
@@ -36,5 +36,6 @@ public class EtlTaskstepAction implements Serializable {
     public static Action build(Task flow, EtlTaskstepAction dto, ApplicationContext ctx) throws Throwable {
         return new Action(dto.getAction(), dto.getName());
     }
+
 }
 

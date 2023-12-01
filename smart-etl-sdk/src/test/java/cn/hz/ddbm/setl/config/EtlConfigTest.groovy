@@ -1,7 +1,7 @@
 package cn.hz.ddbm.setl.config
 
 import cn.hz.ddbm.setl.entity.BaseDatasource
-import cn.hz.setl.commons.utils.ValueObjectUtils
+import cn.hz.setl.commons.utils.ConfigTableUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,7 +21,8 @@ public class EtlConfigTest {
 
     @Test
     public void getValueObjectService() {
-        List<BaseDatasource> dss = ValueObjectUtils.findAll(ctx, BaseDatasource.class);
+
+        List<BaseDatasource> dss =  ConfigTableUtils.findAll(BaseDatasource.class);
         Assert.assertNotNull(dss)
     }
 

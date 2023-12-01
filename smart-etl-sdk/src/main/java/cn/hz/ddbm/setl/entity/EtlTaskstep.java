@@ -23,7 +23,7 @@ import org.springframework.util.StringUtils;
  */
 @Data
 @TableName("ETL_TASKSTEP")
-public class EtlTaskstep implements Serializable {
+public class EtlTaskstep implements Serializable    {
     private static final long     serialVersionUID = 888541690116609515L;
     @TableId
     private              Integer  id;
@@ -59,5 +59,6 @@ public class EtlTaskstep implements Serializable {
     public <T> T getAttr(String attrName, Class<T> type) {
         return (T) getAttrs().get(attrName);
     }
+
 }
 

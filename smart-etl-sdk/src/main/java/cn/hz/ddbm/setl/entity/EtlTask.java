@@ -27,13 +27,13 @@ import org.springframework.util.StringUtils;
  */
 @Data
 @TableName("ETL_TASK")
-public class EtlTask implements Serializable {
+public class EtlTask implements Serializable    {
     private static final long       serialVersionUID = 311928112251012978L;
     @TableId
     private              String     taskCode;
-    private String     name;
-    private EngineType type;
-    private String     service;
+    private              String     name;
+    private              EngineType type;
+    private              String     service;
     private              String     taskService;
     private              Object     cron;
     private              String     attrsJson;
