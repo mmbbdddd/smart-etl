@@ -15,9 +15,9 @@ public class RuntimeFactory {
     public static Runtime get(RuntimeType container) {
         switch (container) {
             case java:
-                return shell;
-            case sh:
                 return java;
+            case sh:
+                return shell;
             default:
                 return java;
         }
