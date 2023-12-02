@@ -1,8 +1,7 @@
 package cn.hz.ddbm.setl.domain;
 
-import cn.hz.ddbm.setl.exception.EtlRouteException;
-import cn.hz.ddbm.setl.exception.EtlStepException;
-import cn.hz.ddbm.setl.exception.NoActionForCommandException;
+import cn.hz.ddbm.setl.exception.ArgsException;
+import cn.hz.ddbm.setl.exception.ExecuteException;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 import lombok.Getter;
 import lombok.NonNull;
@@ -32,14 +31,18 @@ public class Step {
     }
 
 
-    public String execute(TaskRuntimeContext ctx) throws EtlStepException, EtlRouteException, NoActionForCommandException {
+    public String execute(TaskRuntimeContext ctx) throws ExecuteException, ArgsException {
         ctx.setStep(this);
         Action action = actions.get(ctx.getCommand());
         if (null == action) {
-            throw new NoActionForCommandException(ctx.getTask().getCode(),this, ctx.getCommand());
+            throw ArgsException.noActionForCommand(ctx.getTask().getCode(), this, ctx.getCommand());
         }
-        action.execute(ctx);
-        return ctx.getTask().getTaskFactory().normalRoute(ctx);
+        try {
+            action.execute(ctx);
+        } catch (Exception e) {
+            throw new ExecuteException(this, action, e);
+        }
+        return ctx.getTask().getTaskFactory().route(ctx);
     }
 
     public <T> T getAttr(String attrName, Class<T> type) {

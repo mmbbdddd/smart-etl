@@ -2,11 +2,14 @@ package cn.hz.ddbm.setl.service.factory;
 
 import cn.hutool.json.JSONUtil;
 import cn.hz.ddbm.setl.domain.*;
-import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.config.EtlConfig;
 import cn.hz.ddbm.setl.entity.EntryTask;
 import cn.hz.ddbm.setl.entity.EntryTaskstep;
 import cn.hz.ddbm.setl.entity.EntryTaskstepAction;
+import cn.hz.ddbm.setl.entity.TaskStatus;
+import cn.hz.ddbm.setl.exception.ExecuteException;
+import cn.hz.ddbm.setl.exception.FailExecuteException;
+import cn.hz.ddbm.setl.exception.RouteExecuteException;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 import cn.hz.setl.commons.utils.ConfigTableUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +40,7 @@ public class PipelineFactory extends BaseTaskFactory {
                 Task flow = EntryTask.build(this, EngineType.PIPELINE, task, taskSteps.get(task.getTaskCode()), taskActions.get(task.getTaskCode()), ctx);
                 log.debug("构建ETL工作流{}:{}", task.getTaskCode(), JSONUtil.toJsonStr(flow));
                 return flow;
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 log.error("构建ETL工作流{}异常:", task.getTaskCode(), e);
                 return null;
             }
@@ -62,7 +65,7 @@ public class PipelineFactory extends BaseTaskFactory {
      * pipeline模式 路由逻辑： 按照step.index顺序执行。
      */
     @Override
-    public String normalRoute(TaskRuntimeContext ctx) throws EtlRouteException {
+    public String route(TaskRuntimeContext ctx) throws RouteExecuteException {
         return nextIndexStep(ctx.getTask(), ctx.getStep());
     }
 
@@ -75,11 +78,11 @@ public class PipelineFactory extends BaseTaskFactory {
      * @param ctx
      * @param e
      * @return
-     * @throws EtlRouteException
+     * @throws ExecuteException
      */
     @Override
-    public String exceptionRoute(TaskRuntimeContext ctx, Exception e) throws EtlRouteException {
-        return null;
+    public String onException(TaskRuntimeContext ctx, Exception e) throws Exception {
+        throw e;
     }
 
 

@@ -1,7 +1,7 @@
 package cn.hz.ddbm.setl.service.sdk;
 
-import cn.hz.ddbm.setl.exception.EtlException;
 import cn.hz.ddbm.setl.domain.Task;
+import cn.hz.ddbm.setl.exception.ExecuteException;
 import cn.hz.ddbm.setl.service.TaskFactory;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class RedisTaskService implements TaskService {
     }
 
     @Override
-    public TaskRuntimeContext getOrCreateContext(Task task, TaskFactory.EtlTaskRequest request) throws EtlException {
+    public TaskRuntimeContext getOrCreateContext(Task task, TaskFactory.EtlTaskRequest request) throws IOException {
         return datas.computeIfAbsent(request.getTaskId(), new Function<String, TaskRuntimeContext>() {
             @Override
             public TaskRuntimeContext apply(String taskId) {

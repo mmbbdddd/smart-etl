@@ -7,9 +7,15 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class EtlStepException extends Exception {
-    String cmd;
+public class ExecuteException extends Exception {
     Step   step;
     Action action;
+
+    public ExecuteException(Step step, Action action, Exception e) {
+        super(e);
+        this.step   = step;
+        this.action = action;
+    }
+
 
 }

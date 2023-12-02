@@ -2,7 +2,7 @@ package cn.hz.ddbm.setl.service.etlruntime;
 
 import cn.hz.ddbm.setl.EtlTestConfig;
 import cn.hz.ddbm.setl.config.EtlConfig
-import cn.hz.ddbm.setl.exception.EtlException
+import cn.hz.ddbm.setl.exception.ExecuteException
 import cn.hz.ddbm.setl.service.TaskFactory;
 import cn.hz.ddbm.setl.service.factory.PipelineFactory;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class PipelineEtlServiceTest {
             ));
             println(resp.getTaskStatus())
 //            Assert.assertEquals(resp.getTaskStatus().equals(TaskStatus.ing),"")
-        } catch (EtlException e) {
+        } catch (ExecuteException e) {
             throw new RuntimeException(e);
         }
     }

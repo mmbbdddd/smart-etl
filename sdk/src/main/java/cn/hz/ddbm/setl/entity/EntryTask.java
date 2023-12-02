@@ -59,27 +59,26 @@ public class EntryTask implements Serializable {
     }
 
 
-    public static Task build(TaskFactory taskFactory, EngineType type, EntryTask task, List<EntryTaskstep> steps, List<EntryTaskstepAction> actions, ApplicationContext ctx) throws Throwable {
+    public static Task build(TaskFactory taskFactory, EngineType type, EntryTask entryTask, List<EntryTaskstep> steps, List<EntryTaskstepAction> actions, ApplicationContext ctx) throws Exception {
         //构建
-        Task                                       flow      = new Task();
-        Table<String, String, Map<String, Action>> actionMap = buildActions(flow, actions, ctx);
-        flow.setType(type);
-        flow.setCode(task.getTaskCode());
-        flow.setName(task.getName());
-        flow.setFluent(task.getFluent());
-        flow.setService(ctx.getBean(task.getServiceOrDefault(), TaskService.class));
-        flow.setFactory(taskFactory);
-        flow.setSteps(buildSteps(flow, steps, actionMap));
-        Step startStep = flow.getSteps().values().stream().filter(step -> step.getType().equals(StepType.start)).findFirst().orElse(null);
-        Step failStep  = EtlConfig.COAST.FAIL_STEP;
+        Task                                       task      = new Task();
+        Table<String, String, Map<String, Action>> actionMap = buildActions(task, actions, ctx);
+        task.setType(type);
+        task.setCode(entryTask.getTaskCode());
+        task.setName(entryTask.getName());
+        task.setFluent(entryTask.getFluent());
+        task.setService(ctx.getBean(entryTask.getServiceOrDefault(), TaskService.class));
+        task.setFactory(taskFactory);
+        task.setSteps(buildSteps(task, steps, actionMap));
+        Step startStep = task.getSteps().values().stream().filter(step -> step.getType().equals(StepType.start)).findFirst().orElse(null);
         if (null == startStep) {
-            throw new RuntimeException("WorkFlow.code[" + task.getTaskCode() + "].startStep is null");
+            throw new RuntimeException("WorkFlow.code[" + entryTask.getTaskCode() + "].startStep is null");
         }
-        flow.setStartStep(startStep);
-        flow.setFailStep(failStep);
+        task.setStartStep(startStep);
+        task.setFailStep(EtlConfig.COAST.FAIL_STEP);
         //合法性检查
-        flow.validate();
-        return flow;
+        task.validate();
+        return task;
     }
 
     private String getServiceOrDefault() {
@@ -94,7 +93,7 @@ public class EntryTask implements Serializable {
         return taskSteps.stream().collect(Collectors.toMap(Step::getCode, s -> s));
     }
 
-    private static Table<String, String, Map<String, Action>> buildActions(Task flow, List<EntryTaskstepAction> actions, ApplicationContext ctx) throws Throwable {
+    private static Table<String, String, Map<String, Action>> buildActions(Task flow, List<EntryTaskstepAction> actions, ApplicationContext ctx) throws Exception {
         Table<String, String, Map<String, Action>> actionTables = HashBasedTable.create();
         for (EntryTaskstepAction action : actions) {
             Action              actionBean = EntryTaskstepAction.build(flow, action, ctx);

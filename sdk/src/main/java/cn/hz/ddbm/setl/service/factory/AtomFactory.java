@@ -1,10 +1,10 @@
 package cn.hz.ddbm.setl.service.factory;
 
-import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.Task;
 import cn.hz.ddbm.setl.entity.EntryTaskstep;
+import cn.hz.ddbm.setl.exception.RouteExecuteException;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 
 import java.util.Map;
@@ -26,12 +26,12 @@ public class AtomFactory extends BaseTaskFactory {
 
 
     @Override
-    public String normalRoute(TaskRuntimeContext ctx) {
+    public String route(TaskRuntimeContext ctx) {
         return null;
     }
 
     @Override
-    public String exceptionRoute(TaskRuntimeContext ctx, Exception e) throws EtlRouteException {
+    public String onException(TaskRuntimeContext ctx, Exception e)   {
         return null;
     }
 

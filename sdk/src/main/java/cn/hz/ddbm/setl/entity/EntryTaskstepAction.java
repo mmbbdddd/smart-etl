@@ -1,8 +1,8 @@
 package cn.hz.ddbm.setl.entity;
 
 import cn.hutool.json.JSONUtil;
+import cn.hz.ddbm.setl.exception.ConfigException;
 import cn.hz.ddbm.setl.service.Component;
-import cn.hz.ddbm.setl.service.ComponentFactory;
 import com.baomidou.mybatisplus.annotation.TableId;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Task;
@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.Assert;
 
 /**
  * (EtlTaskstepAction)实体类
@@ -35,9 +36,8 @@ public class EntryTaskstepAction implements Serializable {
     private              String  app;
 
 
-    public static Action build(Task flow, EntryTaskstepAction dto, ApplicationContext ctx)   {
-        Component component = ComponentFactory.build(dto.getComponent(),ctx);
-        return new Action(dto.taskCode, dto.getName(), component, JSONUtil.parseObj(dto.attrs));
+    public static Action build(Task flow, EntryTaskstepAction dto, ApplicationContext ctx) throws ConfigException {
+        return new Action(dto.taskCode, dto.getName(), dto.component, JSONUtil.parseObj(dto.attrs));
     }
 
 }

@@ -4,8 +4,8 @@ import cn.hz.ddbm.setl.entity.EntryTask;
 import cn.hz.ddbm.setl.entity.EntryTaskstep;
 import cn.hz.ddbm.setl.entity.TaskLogs;
 import cn.hz.ddbm.setl.entity.TaskStatus;
-import cn.hz.ddbm.setl.exception.EtlException;
-import cn.hz.ddbm.setl.exception.NotSupportFunctionException;
+import cn.hz.ddbm.setl.exception.ArgsException;
+import cn.hz.ddbm.setl.exception.ExecuteException;
 import cn.hz.ddbm.setl.service.EtlWebService;
 import cn.hz.ddbm.setl.service.TaskFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -95,10 +95,10 @@ public class EtlWebServiceImpl implements EtlWebService {
     }
 
     @Override
-    public void cancelTask(String taskId) throws EtlException, IOException, NotSupportFunctionException {
+    public void cancelTask(String taskId) throws ExecuteException, IOException, ArgsException {
         TaskLogs taskLog = repository.selectById(taskId);
         if (taskLog.getEngineType().equals(EngineType.ATOM)) {
-            throw new NotSupportFunctionException("任务ID:" + taskId + "类型为原子，不支持取消");
+            throw ArgsException.notSupportFunction("任务ID:" + taskId + "类型为原子，不支持取消");
         } else {
 //            工作流取消
             if (taskLog.getEngineType().equals(EngineType.PIPELINE)) {
@@ -114,10 +114,10 @@ public class EtlWebServiceImpl implements EtlWebService {
     }
 
     @Override
-    public void pauseTask(String taskId) throws IOException, EtlException, NotSupportFunctionException {
+    public void pauseTask(String taskId) throws IOException, ExecuteException, ArgsException {
         TaskLogs taskLog = repository.selectById(taskId);
         if (taskLog.getEngineType().equals(EngineType.ATOM)) {
-            throw new NotSupportFunctionException("任务ID:" + taskId + "类型为原子，不支持取消");
+            throw ArgsException.notSupportFunction("任务ID:" + taskId + "类型为原子，不支持取消");
         } else {
 //            工作流取消
             if (taskLog.getEngineType().equals(EngineType.PIPELINE)) {

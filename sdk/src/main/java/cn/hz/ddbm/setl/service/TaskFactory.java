@@ -1,7 +1,7 @@
 package cn.hz.ddbm.setl.service;
 
-import cn.hz.ddbm.setl.exception.EtlException;
-import cn.hz.ddbm.setl.exception.EtlRouteException;
+import cn.hz.ddbm.setl.exception.ExecuteException;
+import cn.hz.ddbm.setl.exception.RouteExecuteException;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Step;
@@ -10,6 +10,7 @@ import cn.hz.ddbm.setl.entity.EntryTaskstep;
 import cn.hz.ddbm.setl.entity.TaskStatus;
 import lombok.Data;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -25,15 +26,15 @@ public interface TaskFactory {
      * @param request
      * @return
      */
-    EtlTaskResponse executeTask(EtlTaskRequest request) throws EtlException;
+    EtlTaskResponse executeTask(EtlTaskRequest request) throws ExecuteException, IOException;
 
     /**
      * 更新流程状态 到运行时（区别于持久态）
      *
      * @param taskId
-     * @throws EtlException
+     * @throws ExecuteException
      */
-    void updateTaskStatus(String taskId, EtlTaskStatus taskStatus) throws EtlException;
+    void updateTaskStatus(String taskId, EtlTaskStatus taskStatus) throws ExecuteException;
 
     /**
      * 从属性中赋值到step
@@ -44,9 +45,9 @@ public interface TaskFactory {
      */
     Step dtoToDomain(EntryTaskstep dto, Task flow, Map<String, Action> actionMap);
 
-    String normalRoute(TaskRuntimeContext ctx) throws EtlRouteException;
+    String route(TaskRuntimeContext ctx) throws RouteExecuteException;
 
-    String exceptionRoute(TaskRuntimeContext ctx, Exception e) throws EtlRouteException;
+    String onException(TaskRuntimeContext ctx, Exception e) throws Exception;
 
 
     //VO

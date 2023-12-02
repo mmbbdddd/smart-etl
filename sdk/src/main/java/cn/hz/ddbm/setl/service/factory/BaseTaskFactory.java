@@ -1,7 +1,7 @@
 package cn.hz.ddbm.setl.service.factory;
 
 import cn.hutool.json.JSONUtil;
-import cn.hz.ddbm.setl.exception.EtlException;
+import cn.hz.ddbm.setl.exception.ExecuteException;
 import cn.hz.ddbm.setl.service.sdk.TaskService;
 import cn.hz.ddbm.setl.domain.Task;
 import cn.hz.ddbm.setl.entity.TaskStatus;
@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public abstract class BaseTaskFactory implements TaskFactory, InitializingBean, 
     }
 
     @Override
-    public EtlTaskResponse executeTask(EtlTaskRequest request) throws EtlException {
+    public EtlTaskResponse executeTask(EtlTaskRequest request) throws ExecuteException, IOException {
 //          0 请求预处理，生成id
 //        1,检查参数是否合法：有taskCode
 //                 错误则返回
@@ -60,12 +61,12 @@ public abstract class BaseTaskFactory implements TaskFactory, InitializingBean, 
     }
 
 
-    public void updateTaskStatus(String taskId, TaskStatus flowStatus) throws EtlException {
+    public void updateTaskStatus(String taskId, TaskStatus flowStatus) throws ExecuteException {
 
     }
 
     @Override
-    public void updateTaskStatus(String taskId, EtlTaskStatus taskStatus) throws EtlException {
+    public void updateTaskStatus(String taskId, EtlTaskStatus taskStatus) throws ExecuteException {
 
     }
 

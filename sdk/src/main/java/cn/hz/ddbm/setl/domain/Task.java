@@ -1,9 +1,9 @@
 package cn.hz.ddbm.setl.domain;
 
+import cn.hz.ddbm.setl.config.EtlConfig;
 import cn.hz.ddbm.setl.entity.TaskStatus;
-import cn.hz.ddbm.setl.exception.EtlRouteException;
-import cn.hz.ddbm.setl.exception.EtlStepException;
-import cn.hz.ddbm.setl.exception.NoActionForCommandException;
+import cn.hz.ddbm.setl.exception.ExecuteException;
+import cn.hz.ddbm.setl.exception.RouteExecuteException;
 import cn.hz.ddbm.setl.service.TaskFactory;
 import cn.hz.ddbm.setl.service.sdk.TaskService;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
@@ -37,7 +37,7 @@ public class Task {
         return fluent;
     }
 
-    public String routeTo(TaskRuntimeContext ctx, EtlStepException e) throws EtlRouteException {
+    public String routeTo(TaskRuntimeContext ctx, ExecuteException e) throws RouteExecuteException {
         return null;
     }
 
@@ -45,7 +45,6 @@ public class Task {
     public void validate() {
         steps.forEach((stepCode, step) -> step.validate());
         startStep.validate();
-        failStep.validate();
     }
 
     public TaskFactory getTaskFactory() {
@@ -57,12 +56,13 @@ public class Task {
     }
 
     public void execute(TaskRuntimeContext ctx) {
-        String engine = ctx.getTask().getType().name();
+        String engine  = ctx.getTask().getType().name();
+        String oldStep = null;
         try {
             loop:
             while (true) {
                 if (ctx.isRunnable()) {
-                    String oldStep  = ctx.getStep().getCode();
+                    oldStep = ctx.getStep().getCode();
                     String nextStep = ctx.getStep().execute(ctx);
                     String action   = ctx.getAction().getName();
                     ctx.updateTaskStep(nextStep);
@@ -77,28 +77,18 @@ public class Task {
                     break;
                 }
             }
-        } catch (EtlStepException e) {
-            String oldStep      = e.getStep().getCode();
-            String failOverStep = null;
+        } catch (Exception e) {
+            String nextStep = null;
             try {
-                failOverStep = getTaskFactory().exceptionRoute(ctx, e);
-                ctx.updateTaskStep(failOverStep);
-                log.warn("{}处理异常:{},{},{},{}==>{}", engine, ctx.getTaskId(), code, ctx.getCommand(), oldStep, failOverStep);
-            } catch (EtlRouteException ex) {
+                nextStep = factory.onException(ctx, e);
+                ctx.setStep(ctx.getTask().getStep(nextStep));
                 //路由异常应该为工作流定义错误，异常不抛出，任务状态设置为失败。
-                ctx.updateTaskStatus(TaskStatus.fail, oldStep);
-                log.error("{}路由异常:{},{},{}", engine, ctx.getTaskId(), code, oldStep, ex);
+                ctx.setTaskStatus(ctx.getStep().getType().getTaskStatus(), nextStep);
+                log.error("{}异常:{},{},{},{},{}", engine, ctx.getTaskId(), code, oldStep, nextStep,e);
+            } catch (Exception ex) {
+                ctx.setTaskStatus(TaskStatus.fail, EtlConfig.COAST.FAIL_STEP.name);
+                log.error("{}异常:{},{},{},{},{}", engine, ctx.getTaskId(), code, oldStep, nextStep,ex);
             }
-        } catch (EtlRouteException re) {
-            String oldStep = re.getStep().getCode();
-            //路由异常应该为工作流定义错误，异常不抛出，任务状态设置为失败。
-            ctx.updateTaskStatus(TaskStatus.fail, oldStep);
-            log.error("{}路由异常:{},{},{}", engine, ctx.getTaskId(), code, oldStep, re);
-        } catch (NoActionForCommandException ce) {
-            String oldStep = ce.getStep().getCode();
-            //路由异常应该为工作流定义错误，异常不抛出，任务状态设置为失败。
-            ctx.updateTaskStatus(TaskStatus.exception, oldStep);
-            log.error("{}指令异常:{},{},{},{}", engine, ctx.getTaskId(), code, oldStep, ce.getCommand(),ce);
         } finally {
             try {
                 service.updateFlowStatus(ctx);

@@ -9,6 +9,7 @@ import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.service.TaskFactory;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -22,16 +23,18 @@ public class TaskRuntimeContext {
     final Map<String, Object> args;
     final Task                task;
     @Setter
-    Step       step;
+    @NonNull
+    Step step;
     @Setter
+    @NonNull
     TaskStatus taskStatus;
     //运行时
     @Setter
-    Action     action;
+    Action    action;
     @Setter
-    Object     result;
+    Object    result;
     @Setter
-    Exception  error;
+    Exception error;
 
     public TaskRuntimeContext(String taskId, String command, Map<String, Object> args, Task task) {
         Assert.notNull(task, "task is null");
@@ -65,8 +68,7 @@ public class TaskRuntimeContext {
         this.taskStatus = step.getType().getTaskStatus();
     }
 
-    public void updateTaskStatus(TaskStatus taskStatus, String stepName) {
-        this.step       = task.getStep(stepName);
+    public void setTaskStatus(TaskStatus taskStatus, String stepName) {
         this.taskStatus = taskStatus;
     }
 
