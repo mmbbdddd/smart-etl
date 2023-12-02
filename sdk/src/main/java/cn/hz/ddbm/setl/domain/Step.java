@@ -1,9 +1,8 @@
 package cn.hz.ddbm.setl.domain;
 
-import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.exception.EtlStepException;
-import cn.hz.ddbm.setl.exception.NotSupportCommandException;
+import cn.hz.ddbm.setl.exception.NoActionForCommandException;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 import lombok.Getter;
 import lombok.NonNull;
@@ -33,11 +32,11 @@ public class Step {
     }
 
 
-    public String execute(TaskRuntimeContext ctx) throws EtlStepException, EtlRouteException, NotSupportCommandException {
+    public String execute(TaskRuntimeContext ctx) throws EtlStepException, EtlRouteException, NoActionForCommandException {
         ctx.setStep(this);
         Action action = actions.get(ctx.getCommand());
-        if(null == action){
-            throw new NotSupportCommandException(this,ctx.getCommand());
+        if (null == action) {
+            throw new NoActionForCommandException(ctx.getTask().getCode(),this, ctx.getCommand());
         }
         action.execute(ctx);
         return ctx.getTask().getTaskFactory().normalRoute(ctx);
@@ -48,7 +47,7 @@ public class Step {
     }
 
     public void validate() {
-        actions.forEach((actionName,action)->{
+        actions.forEach((actionName, action) -> {
             action.validate();
         });
     }

@@ -4,6 +4,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.StepType;
+import cn.hz.ddbm.setl.service.Component;
 import cn.hz.ddbm.setl.service.sdk.RedisTaskService;
 import cn.hz.setl.commons.utils.ConfigTableUtils;
 import org.springframework.context.annotation.Bean;
@@ -31,12 +32,15 @@ public class EtlConfig {
 
 
     public static class COAST {
-        public static final String PIPELINE_INDEX_ATTR = "index";
-        public static final String FLUENT_ATTR         = "fluent";
-        public static final String DEFAULT_SEREVICE    = "redisTaskService";
-        public static final String DEFAULT_COMMAND     = "submit";
-        public static final Step   FAIL_STEP           = new Step("fail", "失败节点", StepType.fail, Collections.emptyMap(), Collections.emptyMap());
-        public static final Action EMPTY_ACTION        = new Action("_emptyAction", "无逻辑Action",Collections.emptyMap());
+        public static final String    PIPELINE_INDEX_ATTR = "index";
+        public static final String    FLUENT_ATTR         = "fluent";
+        public static final String    DEFAULT_SEREVICE    = "redisTaskService";
+        public static final String    DEFAULT_COMMAND     = "submit";
+        public static final Step      FAIL_STEP           = new Step("fail", "失败节点", StepType.fail, Collections.emptyMap(), Collections.emptyMap());
+        public static final Component EMPTY_COMPONENT     = new Component() {
+        };
+        public static final Action    EMPTY_ACTION        = new Action("_emptyAction", "无逻辑Action", EMPTY_COMPONENT, Collections.emptyMap());
+
 
     }
 }

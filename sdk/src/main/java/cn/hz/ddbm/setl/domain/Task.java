@@ -1,10 +1,9 @@
 package cn.hz.ddbm.setl.domain;
 
-import cn.hutool.json.JSONUtil;
 import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.exception.EtlRouteException;
 import cn.hz.ddbm.setl.exception.EtlStepException;
-import cn.hz.ddbm.setl.exception.NotSupportCommandException;
+import cn.hz.ddbm.setl.exception.NoActionForCommandException;
 import cn.hz.ddbm.setl.service.TaskFactory;
 import cn.hz.ddbm.setl.service.sdk.TaskService;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
@@ -14,7 +13,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
@@ -66,7 +64,7 @@ public class Task {
                 if (ctx.isRunnable()) {
                     String oldStep  = ctx.getStep().getCode();
                     String nextStep = ctx.getStep().execute(ctx);
-                    String action   = ctx.getAction().getAction();
+                    String action   = ctx.getAction().getName();
                     ctx.updateTaskStep(nextStep);
                     log.info("{}任务状态变更:{},{},{},{},{}==>{},", engine, ctx.getTaskId(), code, ctx.getCommand(), action, oldStep, nextStep);
                 } else {
@@ -96,9 +94,11 @@ public class Task {
             //路由异常应该为工作流定义错误，异常不抛出，任务状态设置为失败。
             ctx.updateTaskStatus(TaskStatus.fail, oldStep);
             log.error("{}路由异常:{},{},{}", engine, ctx.getTaskId(), code, oldStep, re);
-        } catch (NotSupportCommandException e) {
-            //todo
-            throw new RuntimeException(e);
+        } catch (NoActionForCommandException ce) {
+            String oldStep = ce.getStep().getCode();
+            //路由异常应该为工作流定义错误，异常不抛出，任务状态设置为失败。
+            ctx.updateTaskStatus(TaskStatus.exception, oldStep);
+            log.error("{}指令异常:{},{},{},{}", engine, ctx.getTaskId(), code, oldStep, ce.getCommand(),ce);
         } finally {
             try {
                 service.updateFlowStatus(ctx);

@@ -105,7 +105,7 @@ public class EntryTask implements Serializable {
                     actionTables.put(action.getTaskCode(), action.getStepCode(), actionMap);
                 }
             }
-            actionTables.get(action.getTaskCode(), action.getStepCode()).put(action.getCommand(), actionBean);
+            actionTables.get(action.getTaskCode(), action.getStepCode()).put(action.getCommand().toLowerCase(), actionBean);
         }
         return actionTables;
     }

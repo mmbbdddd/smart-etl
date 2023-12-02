@@ -1,6 +1,8 @@
 package cn.hz.ddbm.setl.entity;
 
 import cn.hutool.json.JSONUtil;
+import cn.hz.ddbm.setl.service.Component;
+import cn.hz.ddbm.setl.service.ComponentFactory;
 import com.baomidou.mybatisplus.annotation.TableId;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Task;
@@ -23,7 +25,7 @@ public class EntryTaskstepAction implements Serializable {
     private static final long    serialVersionUID = 641312056809409315L;
     @TableId
     private              Integer id;
-    private              String  action;
+    private              String  component;
     private              String  name;
     private              String  taskCode;
     private              String  stepCode;
@@ -31,11 +33,11 @@ public class EntryTaskstepAction implements Serializable {
     private              String  attrs;
     private              String  memo;
     private              String  app;
-    private              String  alias;
 
 
-    public static Action build(Task flow, EntryTaskstepAction dto, ApplicationContext ctx) throws Throwable {
-        return new Action(dto.getAlias(), dto.getName(), JSONUtil.parseObj(dto.attrs));
+    public static Action build(Task flow, EntryTaskstepAction dto, ApplicationContext ctx)   {
+        Component component = ComponentFactory.build(dto.getComponent(),ctx);
+        return new Action(dto.taskCode, dto.getName(), component, JSONUtil.parseObj(dto.attrs));
     }
 
 }

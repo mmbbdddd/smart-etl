@@ -5,7 +5,6 @@ import cn.hz.ddbm.setl.entity.EntryTaskstep;
 import cn.hz.ddbm.setl.entity.TaskLogs;
 import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.exception.EtlException;
-import cn.hz.ddbm.setl.exception.NotSupportCommandException;
 import cn.hz.ddbm.setl.exception.NotSupportFunctionException;
 import cn.hz.ddbm.setl.service.EtlWebService;
 import cn.hz.ddbm.setl.service.TaskFactory;

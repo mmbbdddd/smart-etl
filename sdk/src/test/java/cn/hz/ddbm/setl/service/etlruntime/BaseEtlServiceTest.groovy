@@ -36,11 +36,11 @@ public class BaseEtlServiceTest {
 
     @Test
     public void cancelTask() {
-//        pipelineEtlService.updateTaskStatus();
+        pipelineEtlService.updateTaskStatus();
     }
 
     @Test
     public void pauseTask() {
-//        pipelineEtlService.executeTask()
+        pipelineEtlService.executeTask()
     }
 }
