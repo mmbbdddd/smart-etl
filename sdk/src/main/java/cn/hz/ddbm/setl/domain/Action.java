@@ -1,7 +1,7 @@
 package cn.hz.ddbm.setl.domain;
 
 import cn.hz.ddbm.setl.exception.ConfigException;
-import cn.hz.ddbm.setl.service.RuntimeContainerFactory;
+import cn.hz.ddbm.setl.service.RuntimeFactory;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
@@ -40,8 +40,8 @@ public class Action {
     }
 
     public static class ComponentRunner {
-        RuntimeContainerFactory.RuntimeType container;
-        String                              component;
+        RuntimeFactory.RuntimeType container;
+        String                     component;
         String                              args;
 
         public ComponentRunner(String component) throws ConfigException {
@@ -58,7 +58,7 @@ public class Action {
                 for (String part : splits) {
                     if (!StringUtils.isEmpty(part)) {
                         if (this.container == null) {
-                            this.container = RuntimeContainerFactory.RuntimeType.valueOf(part.replace("#", ""));
+                            this.container = RuntimeFactory.RuntimeType.valueOf(part.replace("#", ""));
                         } else if (this.component == null) {
                             this.component = part;
                         } else {
@@ -72,7 +72,7 @@ public class Action {
         }
 
         public void execute(TaskRuntimeContext ctx) {
-            RuntimeContainerFactory.get(container).run(ctx, this);
+            RuntimeFactory.get(container).run(ctx, this);
         }
     }
 
