@@ -1,5 +1,5 @@
 package cn.hz.ddbm.setl.domain;
 
-public enum EngineType {
+public enum TaskType {
     PIPELINE, WORKFLOW, ATOM
 }

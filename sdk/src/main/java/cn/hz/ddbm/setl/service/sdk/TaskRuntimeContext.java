@@ -6,6 +6,7 @@ import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.StepType;
 import cn.hz.ddbm.setl.domain.Task;
 import cn.hz.ddbm.setl.entity.TaskStatus;
+import cn.hz.ddbm.setl.model.EtlTaskRequest;
 import cn.hz.ddbm.setl.service.TaskFactory;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,34 +19,37 @@ import java.util.Map;
 
 @Getter
 public class TaskRuntimeContext {
+    final TaskFactory         taskFactory;
     final String              taskId;
     final String              command;
     final Map<String, Object> args;
     final Task                task;
     @Setter
     @NonNull
-    Step step;
+    Step       step;
     @Setter
     @NonNull
     TaskStatus taskStatus;
     //运行时
     @Setter
-    Action    action;
+    Action     action;
     @Setter
-    Object    result;
+    Object     result;
     @Setter
-    Exception error;
+    Exception  error;
 
-    public TaskRuntimeContext(String taskId, String command, Map<String, Object> args, Task task) {
+    public TaskRuntimeContext(String taskId, String command, Map<String, Object> args, Task task, TaskFactory taskFactory) {
         Assert.notNull(task, "task is null");
-        this.taskId  = taskId;
-        this.command = null == command ? EtlConfig.COAST.DEFAULT_COMMAND : command;
-        this.args    = null == args ? new HashMap<>() : args;
-        this.task    = task;
+        Assert.notNull(taskFactory, "taskFactory is null");
+        this.taskId      = taskId;
+        this.command     = null == command ? EtlConfig.COAST.DEFAULT_COMMAND : command;
+        this.args        = null == args ? new HashMap<>() : args;
+        this.task        = task;
+        this.taskFactory = taskFactory;
     }
 
-    public static TaskRuntimeContext create(TaskFactory.EtlTaskRequest request, Task task) {
-        TaskRuntimeContext c = new TaskRuntimeContext(request.getTaskId(), request.getCommand(), request.getArgs(), task);
+    public static TaskRuntimeContext create(EtlTaskRequest request, Task task, TaskFactory taskFactory) {
+        TaskRuntimeContext c = new TaskRuntimeContext(request.getTaskId(), request.getCommand(), request.getArgs(), task, taskFactory);
         c.step       = task.getStartStep();
         c.taskStatus = TaskStatus.ready;
         return c;
@@ -75,7 +79,7 @@ public class TaskRuntimeContext {
 
     public Action getAction() {
         if (null == action) {
-            return EtlConfig.COAST.EMPTY_ACTION;
+            return EtlConfig.EMPTY_ACTION;
         }
         return action;
     }

@@ -3,6 +3,8 @@ package cn.hz.ddbm.setl.service.etlruntime;
 import cn.hz.ddbm.setl.EtlTestConfig;
 import cn.hz.ddbm.setl.config.EtlConfig
 import cn.hz.ddbm.setl.exception.ExecuteException
+import cn.hz.ddbm.setl.model.EtlTaskRequest
+import cn.hz.ddbm.setl.model.EtlTaskResponse
 import cn.hz.ddbm.setl.service.TaskFactory;
 import cn.hz.ddbm.setl.service.factory.PipelineFactory
 import org.junit.Test;
@@ -23,7 +25,7 @@ public class BaseEtlServiceTest {
     @Test
     public void executeTask() {
         try {
-            TaskFactory.EtlTaskResponse resp = pipelineEtlService.executeTask(new TaskFactory.EtlTaskRequest(
+            EtlTaskResponse resp = pipelineEtlService.executeTask(new EtlTaskRequest(
                     taskCode: "etlTest",
                     fluent: true
             ));

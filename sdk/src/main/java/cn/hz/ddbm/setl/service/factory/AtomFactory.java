@@ -5,6 +5,8 @@ import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.Task;
 import cn.hz.ddbm.setl.entity.EntryTaskstep;
 import cn.hz.ddbm.setl.exception.RouteExecuteException;
+import cn.hz.ddbm.setl.model.EtlTaskRequest;
+import cn.hz.ddbm.setl.model.EtlTaskResponse;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 
 import java.util.Map;

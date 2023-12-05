@@ -17,7 +17,7 @@ public class ConfigTableUtils {
     public static <T> List<T> findAll(ApplicationContext ctx, Class<T> type) {
         NamedParameterJdbcTemplate jdbcTemplate = ctx.getBean(NamedParameterJdbcTemplate.class);
         String                     sql          = buildSqlByType(type);
-        return jdbcTemplate.query(sql, Collections.emptyMap(), BeanPropertyRowMapper.newInstance(type));
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(type));
     }
 
     private static <T> String buildSqlByType(Class<T> type) {

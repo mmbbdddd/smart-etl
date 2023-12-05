@@ -6,10 +6,10 @@ import cn.hz.ddbm.setl.entity.TaskLogs;
 import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.exception.ArgsException;
 import cn.hz.ddbm.setl.exception.ExecuteException;
+import cn.hz.ddbm.setl.model.EtlTaskStatus;
 import cn.hz.ddbm.setl.service.EtlWebService;
-import cn.hz.ddbm.setl.service.TaskFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import cn.hz.ddbm.setl.domain.EngineType;
+import cn.hz.ddbm.setl.domain.TaskType;
 import cn.hz.ddbm.setl.domain.Step;
 import cn.hz.ddbm.setl.domain.Task;
 import cn.hz.ddbm.setl.mapper.EtlTaskLogsMapper;
@@ -97,14 +97,14 @@ public class EtlWebServiceImpl implements EtlWebService {
     @Override
     public void cancelTask(String taskId) throws ExecuteException, IOException, ArgsException {
         TaskLogs taskLog = repository.selectById(taskId);
-        if (taskLog.getEngineType().equals(EngineType.ATOM)) {
+        if (taskLog.getEngineType().equals(TaskType.ATOM)) {
             throw ArgsException.notSupportFunction("任务ID:" + taskId + "类型为原子，不支持取消");
         } else {
 //            工作流取消
-            if (taskLog.getEngineType().equals(EngineType.PIPELINE)) {
+            if (taskLog.getEngineType().equals(TaskType.PIPELINE)) {
                 pipelineEtlService.updateTaskStatus(taskId, TaskStatus.cancel);
             }
-            if (taskLog.getEngineType().equals(EngineType.PIPELINE)) {
+            if (taskLog.getEngineType().equals(TaskType.PIPELINE)) {
                 workflowEtlService.updateTaskStatus(taskId, TaskStatus.cancel);
             }
         }
@@ -116,14 +116,14 @@ public class EtlWebServiceImpl implements EtlWebService {
     @Override
     public void pauseTask(String taskId) throws IOException, ExecuteException, ArgsException {
         TaskLogs taskLog = repository.selectById(taskId);
-        if (taskLog.getEngineType().equals(EngineType.ATOM)) {
+        if (taskLog.getEngineType().equals(TaskType.ATOM)) {
             throw ArgsException.notSupportFunction("任务ID:" + taskId + "类型为原子，不支持取消");
         } else {
 //            工作流取消
-            if (taskLog.getEngineType().equals(EngineType.PIPELINE)) {
+            if (taskLog.getEngineType().equals(TaskType.PIPELINE)) {
                 pipelineEtlService.updateTaskStatus(taskId, TaskStatus.pause);
             }
-            if (taskLog.getEngineType().equals(EngineType.PIPELINE)) {
+            if (taskLog.getEngineType().equals(TaskType.PIPELINE)) {
                 workflowEtlService.updateTaskStatus(taskId, TaskStatus.pause);
             }
         }
@@ -132,7 +132,7 @@ public class EtlWebServiceImpl implements EtlWebService {
     }
 
     @Override
-    public TaskFactory.EtlTaskStatus query(String taskId, String taskCode) {
+    public EtlTaskStatus query(String taskId, String taskCode) {
         return null;
     }
 }

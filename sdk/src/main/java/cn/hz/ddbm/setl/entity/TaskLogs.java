@@ -1,7 +1,7 @@
 package cn.hz.ddbm.setl.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
-import cn.hz.ddbm.setl.domain.EngineType;
+import cn.hz.ddbm.setl.domain.TaskType;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,9 +20,9 @@ public class TaskLogs implements Serializable {
     private static final long       serialVersionUID = -94172125099455904L;
     @TableId
     private              Long       id;
-    private              String     taskCode;
-    private              EngineType engineType;
-    private              TaskStatus taskStatus;
+    private String     taskCode;
+    private TaskType   engineType;
+    private TaskStatus taskStatus;
     private              String     taskStep;
     private              String     stepStatus;
 

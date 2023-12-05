@@ -1,5 +1,6 @@
 package cn.hz.ddbm.setl.domain;
 
+import cn.hz.ddbm.setl.config.EtlConfig;
 import cn.hz.ddbm.setl.exception.ConfigException;
 import cn.hz.ddbm.setl.service.RuntimeFactory;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
@@ -9,6 +10,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Getter
 public class Action {
@@ -24,7 +27,7 @@ public class Action {
     public Action(String stepCode, String name, String component, Map<String, Object> attrs) throws ConfigException {
         this.step            = stepCode;
         this.name            = name;
-        this.componentRunner = null == component ? null : new ComponentRunner(component);
+        this.componentRunner = StringUtils.isEmpty(component) ? EtlConfig.EMPTY_COMPONENT : new ComponentRunner(component);
         this.attrs           = attrs;
         Assert.notNull(this.step, "step is null");
         Assert.notNull(this.name, "name is null");
@@ -40,25 +43,27 @@ public class Action {
     }
 
     public static class ComponentRunner {
-        RuntimeFactory.RuntimeType container;
+        RuntimeFactory.RuntimeType runtimeType;
         String                     component;
-        String                              args;
+        String                     args;
 
         public ComponentRunner(String component) throws ConfigException {
             try {
-//                String c = component;
-//                String pattern = "(#.*?)(\\s{1}.*?)(\\s{1}.*)";
-//                Pattern p1 = Pattern.compile(pattern);
+//                String  c       = component;
+//                String  pattern = "(#.*?)(\\s{1}.*?)(\\s{1}.*)";
+//                Pattern p1      = Pattern.compile(pattern);
 //                Matcher matcher = p1.matcher(c);
-//                this.container = RuntimeContainer.valueOf(matcher.group(1).replace("#", ""));
-//                this.component = matcher.group(2);
-//                this.args      = matcher.group(3);
+//                this.runtimeType = RuntimeFactory.RuntimeType.valueOf(matcher.group(1).replace("#", ""));
+//                this.component   = matcher.group(2);
+//                this.args        = matcher.group(3);
+
+
                 String[] splits = component.split("\\s");
                 this.args = "";
                 for (String part : splits) {
                     if (!StringUtils.isEmpty(part)) {
-                        if (this.container == null) {
-                            this.container = RuntimeFactory.RuntimeType.valueOf(part.replace("#", ""));
+                        if (this.runtimeType == null) {
+                            this.runtimeType = RuntimeFactory.RuntimeType.valueOf(part.replace("#", ""));
                         } else if (this.component == null) {
                             this.component = part;
                         } else {
@@ -71,8 +76,12 @@ public class Action {
             }
         }
 
+        public ComponentRunner() {
+
+        }
+
         public void execute(TaskRuntimeContext ctx) {
-            RuntimeFactory.get(container).run(ctx, this);
+            RuntimeFactory.get(runtimeType).run(ctx, this);
         }
     }
 

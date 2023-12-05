@@ -2,6 +2,9 @@ package cn.hz.ddbm.setl.service;
 
 import cn.hz.ddbm.setl.exception.ExecuteException;
 import cn.hz.ddbm.setl.exception.RouteExecuteException;
+import cn.hz.ddbm.setl.model.EtlTaskRequest;
+import cn.hz.ddbm.setl.model.EtlTaskResponse;
+import cn.hz.ddbm.setl.model.EtlTaskStatus;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 import cn.hz.ddbm.setl.domain.Action;
 import cn.hz.ddbm.setl.domain.Step;
@@ -50,43 +53,9 @@ public interface TaskFactory {
     String onException(TaskRuntimeContext ctx, Exception e) throws Exception;
 
 
-    //VO
 
-    @Data
-    class EtlTaskResponse implements Serializable {
-        String     taskId;
-        String     taskCode;
-        TaskStatus taskStatus;
-        String     flowStep;
-        String     message;
 
-        public static EtlTaskResponse of(TaskRuntimeContext ctx) {
-            EtlTaskResponse s = new EtlTaskResponse();
-            s.taskId     = ctx.getTaskId();
-            s.taskCode   = ctx.getTask().getCode();
-            s.taskStatus = ctx.getTaskStatus();
-            s.flowStep   = ctx.getStep().getCode();
-            s.message    = ctx.getErrorMessage();
-            return s;
-        }
-    }
 
-    @Data
-    class EtlTaskRequest implements Serializable {
-        String              taskId;
-        String              taskCode;
-        String              command;
-        Map<String, Object> args;
-        Boolean             fluent;
-    }
 
-    @Data
-    class EtlTaskStatus implements Serializable {
-        String     taskId;
-        TaskStatus flowStatus;
-        String     flowStep;
-        String     message;
-
-    }
 
 }

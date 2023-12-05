@@ -4,6 +4,7 @@ import cn.hz.ddbm.setl.exception.ArgsException;
 import cn.hz.ddbm.setl.exception.ExecuteException;
 import cn.hz.ddbm.setl.entity.EntryTask;
 import cn.hz.ddbm.setl.entity.EntryTaskstep;
+import cn.hz.ddbm.setl.model.EtlTaskStatus;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -42,9 +43,7 @@ public interface EtlWebService {
      * @param taskCode
      * @return
      */
-    TaskFactory.EtlTaskStatus query(String taskId, String taskCode);
+    EtlTaskStatus query(String taskId, String taskCode);
 
-    class EtlTaskStatus implements Serializable {
 
-    }
 }

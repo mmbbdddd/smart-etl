@@ -31,9 +31,9 @@ public class EntryTask implements Serializable {
     private static final long       serialVersionUID = 311928112251012978L;
     @TableId
     private              String     taskCode;
-    private              String     name;
-    private              EngineType type;
-    private              String     service;
+    private String   name;
+    private TaskType type;
+    private String   service;
     private              String     taskService;
     private              Object     cron;
     private              String     attrsJson;
@@ -48,7 +48,7 @@ public class EntryTask implements Serializable {
 
 
     public Boolean getFluent() {
-        if (type.equals(EngineType.WORKFLOW)) {
+        if (type.equals(TaskType.WORKFLOW)) {
             return JSONUtil.getByPath(getAttrs(), EtlConfig.COAST.FLUENT_ATTR, Boolean.TRUE);
         }
         return true;
@@ -59,7 +59,7 @@ public class EntryTask implements Serializable {
     }
 
 
-    public static Task build(TaskFactory taskFactory, EngineType type, EntryTask entryTask, List<EntryTaskstep> steps, List<EntryTaskstepAction> actions, ApplicationContext ctx) throws Exception {
+    public static Task build(TaskFactory taskFactory,  TaskType type, EntryTask entryTask, List<EntryTaskstep> steps, List<EntryTaskstepAction> actions, ApplicationContext ctx) throws Exception {
         //构建
         Task                                       task      = new Task();
         Table<String, String, Map<String, Action>> actionMap = buildActions(task, actions, ctx);
@@ -68,14 +68,14 @@ public class EntryTask implements Serializable {
         task.setName(entryTask.getName());
         task.setFluent(entryTask.getFluent());
         task.setService(ctx.getBean(entryTask.getServiceOrDefault(), TaskService.class));
-        task.setFactory(taskFactory);
+        task.setTaskFactory(taskFactory);
         task.setSteps(buildSteps(task, steps, actionMap));
         Step startStep = task.getSteps().values().stream().filter(step -> step.getType().equals(StepType.start)).findFirst().orElse(null);
         if (null == startStep) {
             throw new RuntimeException("WorkFlow.code[" + entryTask.getTaskCode() + "].startStep is null");
         }
         task.setStartStep(startStep);
-        task.setFailStep(EtlConfig.COAST.FAIL_STEP);
+        task.setFailStep(EtlConfig.FAIL_STEP);
         //合法性检查
         task.validate();
         return task;

@@ -1,14 +1,12 @@
 package cn.hz.ddbm.setl.service.factory;
 
 import cn.hutool.json.JSONUtil;
-import cn.hz.ddbm.setl.domain.*;
 import cn.hz.ddbm.setl.config.EtlConfig;
+import cn.hz.ddbm.setl.domain.*;
 import cn.hz.ddbm.setl.entity.EntryTask;
 import cn.hz.ddbm.setl.entity.EntryTaskstep;
 import cn.hz.ddbm.setl.entity.EntryTaskstepAction;
-import cn.hz.ddbm.setl.entity.TaskStatus;
 import cn.hz.ddbm.setl.exception.ExecuteException;
-import cn.hz.ddbm.setl.exception.FailExecuteException;
 import cn.hz.ddbm.setl.exception.RouteExecuteException;
 import cn.hz.ddbm.setl.service.sdk.TaskRuntimeContext;
 import cn.hz.setl.commons.utils.ConfigTableUtils;
@@ -35,9 +33,9 @@ public class PipelineFactory extends BaseTaskFactory {
         List<EntryTaskstepAction>              actions     = ConfigTableUtils.findAll(ctx, EntryTaskstepAction.class);
         Map<String, List<EntryTaskstep>>       taskSteps   = steps.stream().collect(Collectors.groupingBy(EntryTaskstep::getTaskCode));
         Map<String, List<EntryTaskstepAction>> taskActions = actions.stream().collect(Collectors.groupingBy(EntryTaskstepAction::getTaskCode));
-        List<Task> flows = tasks.stream().filter(task -> task.getType().equals(EngineType.PIPELINE)).map(task -> {
+        List<Task> flows = tasks.stream().filter(task -> task.getType().equals(TaskType.PIPELINE)).map(task -> {
             try {
-                Task flow = EntryTask.build(this, EngineType.PIPELINE, task, taskSteps.get(task.getTaskCode()), taskActions.get(task.getTaskCode()), ctx);
+                Task flow = EntryTask.build( this,TaskType.PIPELINE, task, taskSteps.get(task.getTaskCode()), taskActions.get(task.getTaskCode()), ctx);
                 log.debug("构建ETL工作流{}:{}", task.getTaskCode(), JSONUtil.toJsonStr(flow));
                 return flow;
             } catch (Exception e) {

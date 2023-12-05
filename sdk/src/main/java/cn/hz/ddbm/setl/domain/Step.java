@@ -42,7 +42,7 @@ public class Step {
         } catch (Exception e) {
             throw new ExecuteException(this, action, e);
         }
-        return ctx.getTask().getTaskFactory().route(ctx);
+        return ctx.getTaskFactory().route(ctx);
     }
 
     public <T> T getAttr(String attrName, Class<T> type) {

@@ -2,6 +2,9 @@ package cn.hz.ddbm.setl.service.factory;
 
 import cn.hutool.json.JSONUtil;
 import cn.hz.ddbm.setl.exception.ExecuteException;
+import cn.hz.ddbm.setl.model.EtlTaskRequest;
+import cn.hz.ddbm.setl.model.EtlTaskResponse;
+import cn.hz.ddbm.setl.model.EtlTaskStatus;
 import cn.hz.ddbm.setl.service.sdk.TaskService;
 import cn.hz.ddbm.setl.domain.Task;
 import cn.hz.ddbm.setl.entity.TaskStatus;
@@ -54,10 +57,10 @@ public abstract class BaseTaskFactory implements TaskFactory, InitializingBean, 
         Task task = getWorkFlow(request.getTaskCode());
         Assert.notNull(task, "Task.taskCode is null:" + request.getTaskCode());
         TaskService        taskService = task.getService();
-        TaskRuntimeContext ctx         = taskService.getOrCreateContext(task, request);
+        TaskRuntimeContext ctx         = taskService.getOrCreateContext(task, request,this);
 //       步骤 3456
         task.execute(ctx);
-        return TaskFactory.EtlTaskResponse.of(ctx);
+        return EtlTaskResponse.of(ctx);
     }
 
 

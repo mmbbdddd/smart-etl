@@ -22,7 +22,7 @@ import java.util.Objects;
 public class Task {
     @NonNull String            code;
     @NonNull String            name;
-    @NonNull EngineType        type;
+    @NonNull TaskType          type;
     @NonNull Boolean           fluent;
     @NonNull Map<String, Step> steps;
     @NonNull Step              startStep;
@@ -30,7 +30,7 @@ public class Task {
     @NonNull
     TaskService service;
     @NonNull
-    TaskFactory factory;
+    TaskFactory taskFactory;
 
 
     public Boolean getFluent() {
@@ -47,9 +47,6 @@ public class Task {
         startStep.validate();
     }
 
-    public TaskFactory getTaskFactory() {
-        return factory;
-    }
 
     public Step getStep(String stepName) {
         return steps.get(stepName);
@@ -80,14 +77,14 @@ public class Task {
         } catch (Exception e) {
             String nextStep = null;
             try {
-                nextStep = factory.onException(ctx, e);
+                nextStep = ctx.getTaskFactory().onException(ctx, e);
                 ctx.setStep(ctx.getTask().getStep(nextStep));
                 //路由异常应该为工作流定义错误，异常不抛出，任务状态设置为失败。
                 ctx.setTaskStatus(ctx.getStep().getType().getTaskStatus(), nextStep);
-                log.error("{}异常:{},{},{},{},{}", engine, ctx.getTaskId(), code, oldStep, nextStep,e);
+                log.error("{}异常:{},{},{},{},{}", engine, ctx.getTaskId(), code, oldStep, nextStep, e);
             } catch (Exception ex) {
-                ctx.setTaskStatus(TaskStatus.fail, EtlConfig.COAST.FAIL_STEP.name);
-                log.error("{}异常:{},{},{},{},{}", engine, ctx.getTaskId(), code, oldStep, nextStep,ex);
+                ctx.setTaskStatus(TaskStatus.fail, EtlConfig.FAIL_STEP.name);
+                log.error("{}异常:{},{},{},{},{}", engine, ctx.getTaskId(), code, oldStep, nextStep, ex);
             }
         } finally {
             try {
@@ -119,5 +116,9 @@ public class Task {
         return "Task{" +
                 "code='" + code + '\'' +
                 '}';
+    }
+
+    public TaskFactory getTaskFactory() {
+        return taskFactory;
     }
 }
